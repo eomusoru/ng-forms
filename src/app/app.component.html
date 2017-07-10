@@ -1,20 +1,63 @@
-<!--The whole content below can be removed with the new code.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{title}}!!
-  </h1>
-  <img width="300" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxOS4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiDQoJIHZpZXdCb3g9IjAgMCAyNTAgMjUwIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAyNTAgMjUwOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPg0KCS5zdDB7ZmlsbDojREQwMDMxO30NCgkuc3Qxe2ZpbGw6I0MzMDAyRjt9DQoJLnN0MntmaWxsOiNGRkZGRkY7fQ0KPC9zdHlsZT4NCjxnPg0KCTxwb2x5Z29uIGNsYXNzPSJzdDAiIHBvaW50cz0iMTI1LDMwIDEyNSwzMCAxMjUsMzAgMzEuOSw2My4yIDQ2LjEsMTg2LjMgMTI1LDIzMCAxMjUsMjMwIDEyNSwyMzAgMjAzLjksMTg2LjMgMjE4LjEsNjMuMiAJIi8+DQoJPHBvbHlnb24gY2xhc3M9InN0MSIgcG9pbnRzPSIxMjUsMzAgMTI1LDUyLjIgMTI1LDUyLjEgMTI1LDE1My40IDEyNSwxNTMuNCAxMjUsMjMwIDEyNSwyMzAgMjAzLjksMTg2LjMgMjE4LjEsNjMuMiAxMjUsMzAgCSIvPg0KCTxwYXRoIGNsYXNzPSJzdDIiIGQ9Ik0xMjUsNTIuMUw2Ni44LDE4Mi42aDBoMjEuN2gwbDExLjctMjkuMmg0OS40bDExLjcsMjkuMmgwaDIxLjdoMEwxMjUsNTIuMUwxMjUsNTIuMUwxMjUsNTIuMUwxMjUsNTIuMQ0KCQlMMTI1LDUyLjF6IE0xNDIsMTM1LjRIMTA4bDE3LTQwLjlMMTQyLDEzNS40eiIvPg0KPC9nPg0KPC9zdmc+DQo=" />
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" href="http://angularjs.blogspot.ca/">Angular blog</a></h2>
-  </li>
-</ul>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+            <!-- The formGroup tells angular to sync this form with the one fom typescript -->
+            <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+                <div formGroupName="userData">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" class="form-control" formControlName='username'>
+                        <span *ngIf="!signupForm.get('userData.username').valid && signupForm.get('userData.username').touched" class="help-block">
+                            <span class="help-block" *ngIf="signupForm.get('userData.username').errors['nameIsForbidden']">
+                                This user is forbidden
+                            </span>
+                        <span class="help-block" *ngIf="signupForm.get('userData.username').errors['required']">
+                                This user is required
+                            </span>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" class="form-control" formControlName='email'>
+                        <span *ngIf="!signupForm.get('userData.email').valid && signupForm.get('userData.email').touched" class="help-block">
+                            <span class="help-block" *ngIf="signupForm.get('userData.email').errors['emailForbidden']">
+                                This email is forbidden
+                            </span>
+                        <span class="help-block" *ngIf="signupForm.get('userData.email').invalid">
+                                Email is invalid
+                            </span>
+                        <span class="help-block" *ngIf="signupForm.get('userData.email').errors['required']">
+                                Email is required
+                            </span>
 
+                        </span>
+                    </div>
+                </div>
+                <div class="radio" *ngFor="let gender of genders">
+                    <label for="">
+                      <input type="radio" [value]="gender" formControlName='gender'> {{ gender }}
+                    </label>
+                </div>
+                <div formArrayName='hobbies'>
+
+                    <h3>Hobbies</h3>
+                    <div class='form-group'>
+                        <button class="btn btn-default" type="button" (click)='onAddHobbies()'>Add hobbies</button>
+                    </div>
+
+                    <!-- Div creates only the FormControl of the form element and i gets it's position in the array of hobbies. 
+                    In this way, we say to our form element, that formControlName = positionInArray and positionInArray will be the name 
+                    (actually it's the key in the array) of the property which holds that new input value. -->
+
+                    <div class='form-group' *ngFor="let hobbie of signupForm.get('hobbies').controls; let i = index">
+                        <input type="text" class="form-control" [formControlName]="i">
+                    </div>
+
+                </div>
+
+                <span *ngIf="!signupForm.valid && signupForm.touched" class="help-block">Please enter valid data</span>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
